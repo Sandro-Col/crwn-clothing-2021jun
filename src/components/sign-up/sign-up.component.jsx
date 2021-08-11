@@ -42,6 +42,7 @@ class SignUp extends React.Component {
       });
 
     } catch (error) {
+      alert("The email address is already in use by another account.");
       console.log(error);
     }
   };
