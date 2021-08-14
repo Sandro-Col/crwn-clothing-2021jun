@@ -43,4 +43,17 @@
       border: none;
     }
   }
+
+  &.clear-cart {
+    background-color: orange;
+    color: white;
+    border: none;
+
+    &:hover {
+      
+      background-color: white;
+      color: orange;
+      border: 1px solid black;
+    }
+  }
 }
