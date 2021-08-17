@@ -18,7 +18,7 @@ import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 
 
-const HatsPage = (props) => {
+/* const HatsPage = (props) => {
   console.log(props)
   return(
     <div>
@@ -49,7 +49,7 @@ const MensPage = () => (
   <div>
     <h1>MENS PAGE</h1>
   </div>
-);
+); */
 
 class App extends React.Component {
 
@@ -96,11 +96,7 @@ class App extends React.Component {
             )
           }
         />
-        <Route path='/hats' component={HatsPage} />
-        <Route path='/jackets' component={JacketsPage} />
-        <Route path='/sneakers' component={SneakersPage} />
-        <Route path='/womens' component={WomensPage} />
-        <Route path='/mens' component={MensPage} />
+
       </Switch>
     </div>
   );
