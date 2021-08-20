@@ -8,13 +8,14 @@ import CartIcon from '../cart-icon/cart-icon.component.jsx';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component.jsx';
 import { selectCartHidden } from '../../redux/cart/cart.selectors.js';
 import { selectCurrentUser } from '../../redux/user/user.selectors.js';
+import { clearCart } from '../../redux/cart/cart.actions.js';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import './header.styles.scss';
 
 
-const Header = ({ currentUser, hidden }) => (
+const Header = ({ currentUser, hidden, dispatch }) => (
   <div className='header'>
     <Link className='logo-container' to='/'>
       <Logo className='logo' />
@@ -27,9 +28,18 @@ const Header = ({ currentUser, hidden }) => (
         CONTACT
       </Link>
       {currentUser ? (
-        <div className='option' onClick={() => auth.signOut()}>
-          SIGN OUT <span> ( { currentUser.displayName} ) </span>
-        </div>
+        <Link 
+          className='option'
+          onClick={() => 
+            {
+              dispatch(clearCart());
+              auth.signOut();
+            }
+          }
+        >
+          SIGN OUT 
+          <span> ( { currentUser.displayName} ) </span>
+        </Link>
       ) : (
         <Link className='option' to='/signin'>
           SIGN IN 
