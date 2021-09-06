@@ -14,35 +14,78 @@ const config = {
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
+  const userDocRef = firestore.doc(`users/${userAuth.uid}`);
 
-  // console.log(firestore.doc('users/1234554321'));
-  // const userRef = firestore.doc('users/1234554321');
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userSnapShot = await userDocRef.get();
 
-  const snapShot = await userRef.get();
-  console.log(snapShot);
-
-  if (!snapShot.exists) {
+  if (!userSnapShot.exists) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
-
     try {
-      await userRef.set({
+      await userDocRef.set({
         displayName,
         email,
         createdAt,
         ...additionalData
-      })
-    }  catch (error) {
+      });
+    } catch (error) {
       console.log('error creating user', error.message);
     }
   }
-  return userRef;
+
+  return userDocRef;
 };
 
 
 
 firebase.initializeApp(config);
+
+/* export const addCollectionAndDocuments = async (
+  collectionKey, 
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+  
+  const batch = firestore.batch();
+  objectsToAdd.forEach(obj => {
+    const newDocRef = collectionRef.doc();
+    console.log(newDocRef);
+    batch.set(newDocRef, obj);
+  });
+  
+  return await batch.commit();
+
+} */
+
+export const convertCollectionsSnapshotToMap = collections => {
+  const transformedCollection = collections.docs.map(doc => {
+    const {title, items } = doc.data();
+
+    return{
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items
+    };
+  });
+
+  
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {})
+  /*
+    We pass our initial object, 
+    the initial object goes into the first new element (the first collection), 
+    and it sets the first value (in the accumulator) equal to the title (in lowercase).
+    So, accumulator was an empty object, now with a property of "hats", that is iqual to hats collection.
+    And then it returns that object and it goes into the second object.
+    If the second object is "jackets", then it's going to set a new property called "jackets" and then
+    iqual the jackets collection.
+    So, now we have an object that has a "hats"property equal to the hat collection and 
+    a "jackets" property equal to the jackets collection, and then so on and so forth.
+  */
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
