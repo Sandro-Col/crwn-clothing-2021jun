@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { auth } from '../../firebase/firebase.utils.js';
 import CartIcon from '../cart-icon/cart-icon.component.jsx';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component.jsx';
 import { selectCartHidden } from '../../redux/cart/cart.selectors.js';
 import { selectCurrentUser } from '../../redux/user/user.selectors.js';
+import { signOutStart } from '../../redux/user/user.actions';
 import { clearCart } from '../../redux/cart/cart.actions.js';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
@@ -33,9 +33,10 @@ const Header = ({ currentUser, hidden, dispatch }) => (
           onClick={() => 
             {
               dispatch(clearCart());
-              auth.signOut();
+              dispatch(signOutStart());
             }
           }
+          to='/'
         >
           SIGN OUT 
           <span> ( { currentUser.displayName} ) </span>
